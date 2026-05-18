@@ -44,5 +44,15 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+    //RecyclerView 是 Android 里一种用于显示列表的控件。
+    //RecyclerView.Adapter 是 RecyclerView 用来显示列表项的一种适配器。
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    //ExoPlayer 是 Android 里一种用于播放视频的一种库。
+    implementation("androidx.media3:media3-exoplayer:1.4.1")
+    //Media3 是 Android 里一种用于播放视频的一种库。
+    //它包含了 ExoPlayer 等视频播放器的实现。
+    implementation("androidx.media3:media3-ui:1.4.1")
+    //ExoPlayer 是 Android 里一种用于播放视频的一种库。
+    //它包含了 ExoPlayer 等视频播放器的实现。
+    implementation("androidx.media3:media3-exoplayer-dash:1.4.1")
 }
