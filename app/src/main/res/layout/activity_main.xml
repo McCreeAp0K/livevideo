@@ -92,47 +92,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/chatArea"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvComments"
         android:layout_width="0dp"
         android:layout_height="220dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="16dp"
         android:background="#33000000"
-        android:orientation="vertical"
         android:padding="12dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toTopOf="@+id/inputBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <TextView
-            android:id="@+id/tvComment1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="小王：主播好强"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvComment2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="小李：来了来了"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvComment3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="小张：这个直播不错"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_comment" />
 
     <LinearLayout
         android:id="@+id/inputBar"
