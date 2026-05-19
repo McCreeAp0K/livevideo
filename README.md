@@ -14,6 +14,7 @@ This project focuses on a single live room experience and includes:
 - Comment sending through HTTP POST
 - Fresco-based avatar loading
 - First-frame loading overlay for better perceived startup
+- First-frame trace logging for startup timing analysis
 - Basic playback lifecycle handling
 - UI update throttling and comment batching for smoother rendering
 
@@ -30,7 +31,9 @@ The codebase is intentionally small and easy to read. It is suitable as:
 - Plays a DASH live stream using `androidx.media3`
 - Uses a custom `LoadControl` tuned for faster startup
 - Shows a full-screen loading overlay before the first frame is rendered
-- Starts playback early, then loads room data after the player becomes ready
+- Hides the loading overlay only after the first frame is actually rendered
+- Starts playback early, then loads room data after the player reaches `STATE_READY`
+- Recovers automatically from `behind live window` playback errors
 - Pauses in `onPause()` and resumes in `onResume()`
 
 ### Room UI
@@ -52,6 +55,9 @@ The codebase is intentionally small and easy to read. It is suitable as:
 
 - First-frame loading layer to improve perceived startup
 - Delayed room data initialization until playback is ready
+- Hides loading only after `onRenderedFirstFrame()` to avoid a false-ready black screen
+- First-frame tracing across player setup, buffering, rendering, error, and recovery events
+- Automatic recovery to the default live position after `behind live window`
 - WebSocket callbacks marshalled back to the main thread
 - Viewer count throttling to reduce high-frequency UI refreshes
 - Comment batching in the `ViewModel` to reduce repeated UI work
@@ -65,8 +71,8 @@ The typical startup flow is:
 
 1. Create the player and prepare the live stream.
 2. Show the loading overlay while the first frame is pending.
-3. Once the player reaches `STATE_READY` or renders the first frame, hide the loading layer.
-4. Load anchor info and initial comments.
+3. Once the player reaches `STATE_READY`, load anchor info and initial comments.
+4. Once `onRenderedFirstFrame()` arrives, hide the loading layer.
 5. Connect the WebSocket for viewer count and real-time comments.
 6. Keep comments auto-scrolled to the bottom as new messages arrive.
 
@@ -96,6 +102,8 @@ SimpleLiveRoom/
 - [MainActivity.kt](file:///Users/bytedance/AndroidStudioProjects/SimpleLiveRoom/app/src/main/java/com/example/simpleliveroom/ui/liveroom/MainActivity.kt)
   - Hosts the live room UI
   - Creates and manages the player
+  - Emits first-frame trace logs
+  - Handles first-frame loading and live playback recovery
   - Observes UI state
   - Handles comment list rendering
 
@@ -251,9 +259,11 @@ When the app launches:
 
 - the video player is prepared first
 - a loading overlay is displayed
-- room data starts after playback becomes ready
+- room data starts after playback reaches `STATE_READY`
+- the loading overlay is hidden after `onRenderedFirstFrame()`
 - initial comments and anchor info are loaded
 - live comments and viewer count updates are received through WebSocket
+- `behind live window` errors trigger a seek-to-live recovery and replay
 - the comment list remains pinned to the latest item
 
 ## Limitations
@@ -269,7 +279,7 @@ Notable limitations include:
 - no error-state screen for playback failures
 - no landscape/fullscreen mode
 - no quality switching
-- no analytics or monitoring
+- only basic log-based first-frame tracing, not a full analytics or monitoring stack
 - no sensitive word filtering or moderation
 - limited automated testing
 
