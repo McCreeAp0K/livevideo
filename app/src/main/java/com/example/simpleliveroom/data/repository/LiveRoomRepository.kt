@@ -8,7 +8,13 @@ import com.example.simpleliveroom.data.ws.WebSocketManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
+/**
+ * - 拉主播信息
+ * - 拉历史评论
+ * - 发送评论
+ * - 连接 WebSocket
+ * - 断开 WebSocket
+ */
 class LiveRoomRepository {
 
     private var webSocketManager: WebSocketManager? = null

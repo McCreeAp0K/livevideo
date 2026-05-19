@@ -4,11 +4,15 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitProvider {
-
+    /**
+     * Retrofit实例
+     */
     private val retrofit = Retrofit.Builder()
         .baseUrl("http://10.37.242.55:3000/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
+    /**
+     * 获取ApiService实例
+     */
     val apiService: ApiService = retrofit.create(ApiService::class.java)
 }

@@ -9,11 +9,28 @@ import androidx.lifecycle.ViewModel
 import com.example.simpleliveroom.data.repository.LiveRoomRepository
 import com.example.simpleliveroom.model.AnchorInfo
 import com.example.simpleliveroom.model.CommentMessage
-
+/**
+ * 直播间ViewModel
+ * - 一个保存页面状态的地方
+ * - - 一组修改状态的工具方法
+ * - 页面展示什么，不是 MainActivity 自己决定
+ * - 而是 ViewModel 里状态决定
+ * - 保存页面状态
+ * - 加载初始化数据
+ * - 发送评论
+ * - 建立和断开 WebSocket
+ * - 更新在线人数和评论
+ * - 做一些简单的性能优化
+ */
 class LiveRoomViewModel(
     private val repository: LiveRoomRepository
 ) : ViewModel() {
-
+    /**
+     * - VIEWER_COUNT_THROTTLE_MS = 1000L
+     * - 用来控制在线人数刷新频率
+     * - COMMENT_BATCH_WINDOW_MS = 300L
+     * - 用来控制评论聚合的时间窗口
+     */
     companion object {
         private const val VIEWER_COUNT_THROTTLE_MS = 1000L
         private const val COMMENT_BATCH_WINDOW_MS = 300L
@@ -21,12 +38,17 @@ class LiveRoomViewModel(
 
     private val roomId = "1001"
     private val mainHandler = Handler(Looper.getMainLooper())
-
+    /**
+     * 页面状态
+     */
     private val _uiState = MutableLiveData(LiveRoomUiState())
     val uiState: LiveData<LiveRoomUiState> = _uiState
 
     private var lastViewerCountDispatchAt = 0L
     private var pendingViewerCount: Int? = null
+    /**
+     * - 稍后刷新在线人数的任务
+     */
     private val viewerCountDispatchRunnable = Runnable {
         val viewerCount = pendingViewerCount ?: return@Runnable
         pendingViewerCount = null
@@ -41,7 +63,9 @@ class LiveRoomViewModel(
     private fun currentState(): LiveRoomUiState {
         return _uiState.value ?: LiveRoomUiState()
     }
-
+    /**
+     * 更新状态
+     */
     private fun updateState(transform: (LiveRoomUiState) -> LiveRoomUiState) {
         _uiState.value = transform(currentState())
     }
@@ -116,7 +140,12 @@ class LiveRoomViewModel(
             )
         }
     }
-
+    /**
+     * - 在线人数来的很频繁时
+     * - 不要每次都立刻刷新 UI
+     * - 最多每 1000ms 刷一次
+     * - 但最后一个最新值不能丢
+     */
     fun updateViewerCount(viewerCount: Int) {
         val now = SystemClock.elapsedRealtime()
         val elapsed = now - lastViewerCountDispatchAt
@@ -127,7 +156,15 @@ class LiveRoomViewModel(
             dispatchViewerCount(viewerCount)
             return
         }
-
+        /**
+         * 意思是：
+         * - 如果之前已经安排过一个“稍后更新”的任务
+         * - 那先把那个任务取消掉
+         * 为什么要取消：
+         * - 因为现在已经决定立刻更新了
+         * - 后面那个延迟任务就没必要再执行
+         * - 不然可能重复更新
+         */
         pendingViewerCount = viewerCount
         mainHandler.removeCallbacks(viewerCountDispatchRunnable)
         mainHandler.postDelayed(

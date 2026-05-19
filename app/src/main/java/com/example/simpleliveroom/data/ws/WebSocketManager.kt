@@ -14,6 +14,9 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 
+/**
+ * WebSocket管理器
+ */
 class WebSocketManager(
     private val roomId: String,
     private val onViewerCountUpdate: (Int) -> Unit,
