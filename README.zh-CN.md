@@ -3,6 +3,7 @@
 SimpleLiveRoom 是一个精简的 Android 直播间示例项目，基于 Kotlin、Media3 ExoPlayer、Retrofit、OkHttp WebSocket 和 Fresco 构建。它演示了如何搭建一个基础直播间，包括视频播放、房间信息展示、实时评论、在线人数更新，以及一些轻量级性能优化实践。
 
 英文版说明见 [README.md](file:///Users/bytedance/AndroidStudioProjects/SimpleLiveRoom/README.md)。
+更偏技术复盘的中文总结见 [TECH_SUMMARY.zh-CN.md](file:///Users/bytedance/AndroidStudioProjects/SimpleLiveRoom/TECH_SUMMARY.zh-CN.md)。
 
 ## 项目简介
 
