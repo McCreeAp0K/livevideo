@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#111111"
-    tools:context=".MainActivity">
+    tools:context=".ui.liveroom.MainActivity">
 
     <FrameLayout
         android:id="@+id/videoContainer"
@@ -24,6 +24,31 @@
             android:layout_height="match_parent"
             app:use_controller="false" />
 
+        <LinearLayout
+            android:id="@+id/videoLoading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#66000000"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="直播加载中..."
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
     </FrameLayout>
 
     <LinearLayout
@@ -37,11 +62,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/ivAnchorAvatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@android:drawable/sym_def_app_icon"
             android:contentDescription="主播头像" />
 
         <LinearLayout
@@ -91,7 +115,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvComments"
         android:layout_width="0dp"
-        android:layout_height="220dp"
+        android:layout_height="180dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"

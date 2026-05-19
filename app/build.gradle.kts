@@ -55,4 +55,17 @@ dependencies {
     //ExoPlayer 是 Android 里一种用于播放视频的一种库。
     //它包含了 ExoPlayer 等视频播放器的实现。
     implementation("androidx.media3:media3-exoplayer-dash:1.4.1")
+    //Retrofit 是 Android 里一种用于网络请求的一种库。
+    //它包含了 OkHttp 等网络请求的实现。
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    //Gson 是 Android 里一种用于解析 JSON 的一种库。
+    //它包含了 Gson 解析 JSON 的实现。
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    //OkHttp 是 Android 里一种用于网络请求的一种库。
+    //它包含了 OkHttp 等网络请求的实现。
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    //Fresco 是 Android 里一种用于加载图片的一种库。
+    //它包含了 Fresco 加载图片的实现。
+    implementation("com.facebook.fresco:fresco:3.4.0")
 }

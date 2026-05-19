@@ -1,20 +1,21 @@
-package com.example.simpleliveroom
+package com.example.simpleliveroom.ui.liveroom
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.simpleliveroom.R
+import com.example.simpleliveroom.model.CommentMessage
+import com.facebook.drawee.view.SimpleDraweeView
 
-/**
- * - 告诉 RecyclerView ：每一项评论长什么样
- * - 告诉 RecyclerView ：第几条评论应该显示什么内容
- */
 class CommentAdapter(
     private val commentList: MutableList<CommentMessage>
 ) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
     class CommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val ivUserAvatar: SimpleDraweeView = itemView.findViewById(R.id.ivUserAvatar)
         val tvUserName: TextView = itemView.findViewById(R.id.tvUserName)
         val tvContent: TextView = itemView.findViewById(R.id.tvContent)
     }
@@ -27,8 +28,9 @@ class CommentAdapter(
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         val comment = commentList[position]
-        holder.tvUserName.text = "${comment.userName}："
-        holder.tvContent.text = comment.content
+        holder.ivUserAvatar.setImageURI(Uri.parse(comment.avatar))
+        holder.tvUserName.text = "${comment.name}："
+        holder.tvContent.text = comment.comment
     }
 
     override fun getItemCount(): Int {
@@ -37,7 +39,19 @@ class CommentAdapter(
 
     fun addComment(commentMessage: CommentMessage) {
         commentList.add(commentMessage)
-        //notifyDataSetChanged() 会让整个列表都刷新
         notifyItemInserted(commentList.size - 1)
+    }
+
+    fun addComments(newComments: List<CommentMessage>) {
+        if (newComments.isEmpty()) return
+        val startPosition = commentList.size
+        commentList.addAll(newComments)
+        notifyItemRangeInserted(startPosition, newComments.size)
+    }
+
+    fun replaceComments(newComments: List<CommentMessage>) {
+        commentList.clear()
+        commentList.addAll(newComments)
+        notifyDataSetChanged()
     }
 }
